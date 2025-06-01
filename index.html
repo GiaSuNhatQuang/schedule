@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Học Hè - Gia Sư Nhật Quang</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .day-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .day-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .day-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .day-card:nth-child(1) { border-left-color: #ff6b6b; }
+        .day-card:nth-child(2) { border-left-color: #4ecdc4; }
+        .day-card:nth-child(3) { border-left-color: #45b7d1; }
+        .day-card:nth-child(4) { border-left-color: #96ceb4; }
+        .day-card:nth-child(5) { border-left-color: #feca57; }
+        .day-card:nth-child(6) { border-left-color: #ff9ff3; }
+        .day-card:nth-child(7) { border-left-color: #54a0ff; }
+
+        .day-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .day-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            border-radius: 2px;
+        }
+
+        .subject {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+            border-left: 4px solid #007bff;
+            transition: all 0.3s ease;
+        }
+
+        .subject:hover {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            transform: translateX(5px);
+        }
+
+        .subject-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .subject-name::before {
+            content: '📚';
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .time-slot {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .time-slot::before {
+            content: '🕐';
+            margin-right: 8px;
+        }
+
+        .time-period {
+            font-weight: 500;
+            margin-right: 10px;
+            color: #007bff;
+        }
+
+        .no-class {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .schedule-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .day-card {
+                padding: 20px;
+            }
+        }
+
+        .highlight-today {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
+            50% { box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3); }
+            100% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>LỊCH HỌC HÈ</h1>
+            <p>GIA SƯ NHẬT QUANG</p>
+        </div>
+
+        <div class="schedule-grid">
+            <!-- Thứ Hai -->
+            <div class="day-card" id="monday">
+                <div class="day-title">THỨ HAI</div>
+                <div class="subject">
+                    <div class="subject-name">Tiếng Anh</div>
+                    <div class="time-slot">
+                        <span class="time-period">Sáng:</span>
+                        <span>08:00 – 09:30</span>
+                    </div>
+                    <div class="time-slot">
+                        <span class="time-period">Chiều:</span>
+                        <span>15:00 – 16:30</span>
+                    </div>
+                </div>
+                <div class="subject">
+                    <div class="subject-name">Toán</div>
+                    <div class="time-slot">
+                        <span class="time-period">Chiều:</span>
+                        <span>17:00 – 18:30</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thứ Ba -->
+            <div class="day-card" id="tuesday">
+                <div class="day-title">THỨ BA</div>
+                <div class="subject">
+                    <div class="subject-name">Tiếng Anh</div>
+                    <div class="time-slot">
+                        <span class="time-period">Sáng:</span>
+                        <span>08:00 – 09:30</span>
+                    </div>
+                    <div class="time-slot">
+                        <span class="time-period">Chiều:</span>
+                        <span>15:00 – 16:30</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thứ Tư -->
+            <div class="day-card" id="wednesday">
+                <div class="day-title">THỨ TƯ</div>
+                <div class="subject">
+                    <div class="subject-name">Tiếng Anh</div>
+                    <div class="time-slot">
+                        <span class="time-period">Sáng:</span>
+                        <span>08:00 – 09:30</span>
+                    </div>
+                    <div class="time-slot">
+                        <span class="time-period">Chiều:</span>
+                        <span>15:00 – 16:30</span>
+                    </div>
+                </div>
+                <div class="subject">
+                    <div class="subject-name">Toán</div>
+                    <div class="time-slot">
+                        <span class="time-period">Chiều:</span>
+                        <span>17:00 – 18:30</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thứ Năm -->
+            <div class="day-card" id="thursday">
+                <div class="day-title">THỨ NĂM</div>
+                <div class="subject">
+                    <div class="subject-name">Tiếng Anh</div>
+                    <div class="time-slot">
+                        <span class="time-period">Sáng:</span>
+                        <span>08:00 – 09:30</span>
+                    </div>
+                    <div class="time-slot">
+                        <span class="time-period">Chiều:</span>
+                        <span>15:00 – 16:30</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thứ Sáu -->
+            <div class="day-card" id="friday">
+                <div class="day-title">THỨ SÁU</div>
+                <div class="subject">
+                    <div class="subject-name">Tiếng Hoa (Cơ bản & Giao tiếp)</div>
+                    <div class="time-slot">
+                        <span class="time-period">Sáng:</span>
+                        <span>08:00 – 09:30</span>
+                    </div>
+                    <div class="time-slot">
+                        <span class="time-period">Chiều:</span>
+                        <span>15:00 – 16:30</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thứ Bảy -->
+            <div class="day-card" id="saturday">
+                <div class="day-title">THỨ BẢY</div>
+                <div class="subject">
+                    <div class="subject-name">Tiếng Hoa (Cơ bản & Giao tiếp)</div>
+                    <div class="time-slot">
+                        <span class="time-period">Tối:</span>
+                        <span>18:00 – 19:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chủ Nhật -->
+            <div class="day-card" id="sunday">
+                <div class="day-title">CHỦ NHẬT</div>
+                <div class="no-class">
+                    <p>🌴 Nghỉ ngơi</p>
+                    <p>Thời gian thư giãn và ôn tập</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Gia Sư Nhật Quang - Lịch học có thể thay đổi theo thông báo</p>
+        </div>
+    </div>
+
+    <script>
+        // Highlight hôm nay
+        function highlightToday() {
+            const today = new Date().getDay();
+            const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            
+            if (today >= 0 && today < days.length) {
+                const todayCard = document.getElementById(days[today]);
+                if (todayCard) {
+                    todayCard.classList.add('highlight-today');
+                }
+            }
+        }
+
+        // Hiệu ứng loading
+        function animateCards() {
+            const cards = document.querySelectorAll('.day-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        }
+
+        // Khởi tạo khi trang được tải
+        window.addEventListener('load', () => {
+            highlightToday();
+            animateCards();
+        });
+
+        // Thêm hiệu ứng click
+        document.querySelectorAll('.subject').forEach(subject => {
+            subject.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'translateX(5px)';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
